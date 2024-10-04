@@ -20,8 +20,8 @@ export class DecrementStockService {
     product.decrementStock(quantity);
     await this.productRepository.update(product);
 
-    /*if (product.stock === 0) {
+    if (product.stock === 0) {
       await this.emailService.sendStockAlert(product);
-    }*/
+    }
   }
 }
