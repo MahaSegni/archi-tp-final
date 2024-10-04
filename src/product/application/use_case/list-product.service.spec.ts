@@ -28,8 +28,7 @@ class ProductRepositoryFake implements ProductRepositoryInterface {
     return this.products;
   }
 
-  // Ajoutez cette méthode pour réinitialiser les produits entre les tests
-  public clear(): void {
+ public clear(): void {
     this.products = [];
   }
 }

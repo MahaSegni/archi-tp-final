@@ -2,6 +2,7 @@ import { Order } from '../entity/order.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 export interface ItemDetailCommand {
+  id: string;
   productName: string;
   price: number;
   quantity: number;

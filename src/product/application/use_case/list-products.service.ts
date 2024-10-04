@@ -7,10 +7,6 @@ export class ListProductsService {
   async execute(isActive?: boolean): Promise<Product[]> {
     const allProducts = await this.productRepository.findAll();
 
-    if (typeof isActive === 'boolean') {
-      return allProducts.filter(product => product.isActive === isActive);
-    }
-
     return allProducts;
   }
 }

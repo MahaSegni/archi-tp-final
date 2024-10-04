@@ -72,7 +72,7 @@ export class Order {
 
   @Column()
   @Expose({ groups: ['group_orders'] })
-  private status: string;
+  status: string;
 
   @Column({ nullable: true })
   @Expose({ groups: ['group_orders'] })
@@ -175,7 +175,7 @@ export class Order {
   //   return this;
   // }
 
-  private calculateOrderAmount(items: ItemDetailCommand[]): number {
+  calculateOrderAmount(items: ItemDetailCommand[]): number {
     const totalAmount = items.reduce((sum, item) => sum + item.price, 0);
 
     if (totalAmount < Order.AMOUNT_MINIMUM) {
@@ -213,7 +213,14 @@ export class Order {
     this.cancelAt = new Date('NOW');
     this.cancelReason = cancelReason;
   }
+  addItemToCart(itemDetail: ItemDetailCommand): void {
+    if (this.status !== OrderStatus.PENDING) {
+      throw new Error('Cannot add items to a non-pending order');
+    }
 
+    this.orderItems.push(new OrderItem(itemDetail));
+    this.price = this.calculateOrderAmount(this.orderItems);
+  }
   getInvoiceInfos(): string {
     if (
       this.status !== OrderStatus.PAID &&
@@ -228,4 +235,5 @@ export class Order {
       .join(', ');
     return `invoice number ${this.id}, with items: ${itemsNames}`;
   }
+  
 }
