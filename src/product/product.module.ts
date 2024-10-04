@@ -12,6 +12,9 @@ import { ProductRepositoryImpl } from './infrastructure/persistance/product-repo
 import { ProductRepositoryInterface } from './domain/port/persistance/product-repository.interface';
 import { OrderRepositoryInterface } from 'src/order/domain/port/persistance/order.repository.interface';
 import OrderRepositoryTypeOrm from 'src/order/infrastructure/persistance/order.repository';
+import { CreateDiscountService } from './application/use_case/create-discount.service';
+import { DiscountRepositoryInterface } from './domain/port/persistance/discount-repository.interface';
+import { DiscountRepository } from './infrastructure/persistance/discount-repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Product])],
@@ -57,6 +60,13 @@ import OrderRepositoryTypeOrm from 'src/order/infrastructure/persistance/order.r
         return new DecrementStockService(productRepository, emailService);
       },
       inject: [ProductRepositoryImpl, EmailService], 
+    },
+    {
+      provide: CreateDiscountService,
+      useFactory: (discountRepository: DiscountRepositoryInterface) => {
+        return new CreateDiscountService(discountRepository);
+      },
+      inject: [DiscountRepository],
     },
   ],
 })

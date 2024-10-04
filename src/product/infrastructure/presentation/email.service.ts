@@ -1,4 +1,3 @@
-// src/product/infrastructure/presentation/email.service.ts
 import { Injectable } from '@nestjs/common';
 import { Product } from '../../domain/entity/product.entity';
 
