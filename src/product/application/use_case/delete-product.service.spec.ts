@@ -2,7 +2,9 @@ import { DeleteProductService } from './delete-product.service';
 import { Product } from '../../domain/entity/product.entity';
 import { ProductRepositoryInterface } from 'src/product/domain/port/persistance/product-repository.interface';
 import { OrderRepositoryInterface } from 'src/order/domain/port/persistance/order.repository.interface';
+import { Order } from 'src/order/domain/entity/order.entity';
 
+// Simulation de ProductRepository
 class ProductRepositoryFake implements ProductRepositoryInterface {
   private products: Product[] = [];
 
@@ -34,24 +36,17 @@ class ProductRepositoryFake implements ProductRepositoryInterface {
   }
 }
 
+// Simulation de OrderRepository
 class OrderRepositoryFake implements OrderRepositoryInterface {
-  private orders: { productId: string; id: string; customerName: string; /* autres propriétés */ }[] = [];
+  private orders: { productId: string; id: string; customerName: string }[] = [];
 
   async findOrdersByProductId(productId: string): Promise<any[]> {
     return this.orders.filter(order => order.productId === productId);
   }
 
-  async create(order: any): Promise<void> {
+  async save(order: any): Promise<Order> {
     this.orders.push(order);
-  }
-
-  async save(order: any): Promise<void> {
-    const index = this.orders.findIndex(o => o.id === order.id);
-    if (index > -1) {
-      this.orders[index] = order; // Mise à jour de l'ordre existant
-    } else {
-      this.orders.push(order); // Ajout d'un nouvel ordre
-    }
+    return order;
   }
 
   async findById(id: string): Promise<any | null> {
@@ -111,8 +106,10 @@ describe("DeleteProductService", () => {
 
     // Créer une commande associée au produit
     const order = { productId: product.id, id: 'order-1', customerName: 'John Doe' };
-    await orderRepositoryFake.create(order);
+    await orderRepositoryFake.save(order);
 
-    await expect(deleteProductService.execute(product.id)).rejects.toThrow("Product cannot be deleted because it is associated with existing orders.");
-  });
+    // Modifier le message d'erreur attendu
+    await expect(deleteProductService.execute(product.id)).rejects.toThrow("Cannot delete a product linked to an existing order.");
+});
+
 });

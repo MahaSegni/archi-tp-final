@@ -10,21 +10,13 @@ export default class OrderRepositoryTypeOrm
   constructor(@InjectDataSource() private readonly datasource: DataSource) {
     super(Order, datasource.createEntityManager());
   }
-
+  private orders: Order[] = [];
   async findById(id: string): Promise<Order | null> {
     const queryBuilder = this.createQueryBuilder('order');
 
     queryBuilder.where('order.id = :id', { id });
 
     return queryBuilder.getOne();
-  }
-  async save(order: any): Promise<void> {
-    const index = this.orders.findIndex(o => o.id === order.id);
-    if (index > -1) {
-      this.orders[index] = order; // Mise à jour de l'ordre existant
-    } else {
-      this.orders.push(order); // Ajout d'un nouvel ordre
-    }
   }
   async findAll(): Promise<Order[]> {
     const queryBuilder = this.createQueryBuilder('order');

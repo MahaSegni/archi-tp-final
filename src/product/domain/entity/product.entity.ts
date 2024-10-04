@@ -38,6 +38,9 @@ export class Product {
   createdAt: Date;
 
  constructor(name: string, price: number, stock: number, description: string) {
+  if (!name && !price && !stock && !description) {
+    return;
+  }
     this.name = name;
     this.price = price;
     this.stock = stock ?? 0; // Si le stock n'est pas défini, mettez-le à 0
