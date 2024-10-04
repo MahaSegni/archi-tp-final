@@ -43,9 +43,9 @@ export class Product {
   }
     this.name = name;
     this.price = price;
-    this.stock = stock ?? 0; // Si le stock n'est pas défini, mettez-le à 0
+    this.stock = stock ?? 0; 
     this.description = description;
-    this.validateProduct(); // Validation des propriétés à la création
+    this.validateProduct();
   }
 
   private validateProduct() {
@@ -55,10 +55,10 @@ export class Product {
   }
 
   updateDetails(name: string, price: number, description: string) {
+    this.validateProduct();
     this.name = name;
     this.price = price;
     this.description = description;
-    this.validateProduct();
   }
 
   deactivate() {
