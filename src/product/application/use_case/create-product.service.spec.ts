@@ -20,12 +20,15 @@ class ProductRepositoryFake implements ProductRepositoryInterface {
     this.products = this.products.filter(product => product.id !== productId);
   }
 
-  async findById(id: string): Promise<Product | null> {
+  findById(id: string): Product {
     return this.products.find(product => product.id === id) || null;
   }
 
   async findAll(): Promise<Product[]> {
     return this.products;
+  }
+  decrementStock(product: Product, quantity: number) {
+    product.stock -= quantity;
   }
 }
 

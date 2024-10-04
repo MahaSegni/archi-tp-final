@@ -1,4 +1,4 @@
-import { ProductRepositoryInterface } from "src/product/domain/port/persistance/product-repository.interface";
+import { ProductRepositoryInterface } from "../../domain/port/persistance/product-repository.interface";
 
 export class UpdateProductService {
   constructor(private readonly productRepository: ProductRepositoryInterface) {}

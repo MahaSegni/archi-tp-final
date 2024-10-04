@@ -24,7 +24,7 @@ export class CreateOrderService {
         await this.emailService.sendStockAlert(product);
       }
  
-      product.decrementStock(item.quantity);
+      this.productRepository.decrementStock(product, item.quantity);
  
       orderItems.push({
         id: item.id,

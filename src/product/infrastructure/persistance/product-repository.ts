@@ -1,5 +1,6 @@
 import { ProductRepositoryInterface } from '../../domain/port/persistance/product-repository.interface';
 import { Product } from '../../domain/entity/product.entity';
+import { BadRequestException } from '@nestjs/common';
 
 export class ProductRepositoryImpl implements ProductRepositoryInterface {
   private products: Product[] = [];
@@ -19,11 +20,22 @@ export class ProductRepositoryImpl implements ProductRepositoryInterface {
     this.products = this.products.filter((p) => p.id !== productId);
   }
 
-  async findById(productId: string): Promise<Product | null> {
+  findById(productId: string): Product{
     return this.products.find((p) => p.id === productId) || null;
   }
 
   async findAll(): Promise<Product[]> {
     return this.products; 
+  }
+    decrementStock(produit: Product, quantity: number): void {
+    if (quantity <= 0) {
+      throw new BadRequestException("Quantity must be greater than 0.");
+    }
+
+    if (produit.stock - quantity < 0) {
+      throw new BadRequestException("Insufficient stock.");
+    }
+
+    produit.stock -= quantity;
   }
 }

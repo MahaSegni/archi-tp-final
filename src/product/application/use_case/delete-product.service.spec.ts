@@ -4,11 +4,10 @@ import { ProductRepositoryInterface } from 'src/product/domain/port/persistance/
 import { OrderRepositoryInterface } from 'src/order/domain/port/persistance/order.repository.interface';
 import { Order } from 'src/order/domain/entity/order.entity';
 
-// Simulation de ProductRepository
 class ProductRepositoryFake implements ProductRepositoryInterface {
   private products: Product[] = [];
 
-  async findById(id: string): Promise<Product | null> {
+   findById(id: string): Product {
     return this.products.find(product => product.id === id) || null;
   }
 
@@ -34,9 +33,11 @@ class ProductRepositoryFake implements ProductRepositoryInterface {
       this.products[index] = product;
     }
   }
+  decrementStock(product: Product, quantity: number) {
+    product.stock -= quantity;
+  }
 }
 
-// Simulation de OrderRepository
 class OrderRepositoryFake implements OrderRepositoryInterface {
   private orders: { productId: string; id: string; customerName: string }[] = [];
 
@@ -77,8 +78,8 @@ describe("DeleteProductService", () => {
   let deleteProductService: DeleteProductService;
 
   beforeEach(() => {
-    productRepositoryFake.clear(); // Réinitialiser le dépôt de produits
-    orderRepositoryFake.clear(); // Réinitialiser le dépôt de commandes
+    productRepositoryFake.clear(); 
+    orderRepositoryFake.clear(); 
     deleteProductService = new DeleteProductService(productRepositoryFake, orderRepositoryFake);
   });
 
@@ -104,11 +105,9 @@ describe("DeleteProductService", () => {
     product.isActive = true; 
     await productRepositoryFake.create(product);
 
-    // Créer une commande associée au produit
     const order = { productId: product.id, id: 'order-1', customerName: 'John Doe' };
     await orderRepositoryFake.save(order);
 
-    // Modifier le message d'erreur attendu
     await expect(deleteProductService.execute(product.id)).rejects.toThrow("Cannot delete a product linked to an existing order.");
 });
 

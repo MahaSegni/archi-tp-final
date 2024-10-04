@@ -16,7 +16,7 @@ export class AddItemToCartService {
       throw new Error('Order not found');
     }
 
-    order.addItemToCart(itemDetail);
+    order.addItem(itemDetail);
     await this.orderRepository.save(order);
   }
 }

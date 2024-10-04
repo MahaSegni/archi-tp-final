@@ -17,7 +17,7 @@ export class DecrementStockService {
       throw new Error('Produit non trouvé');
     }
 
-    product.decrementStock(quantity);
+    this.productRepository.decrementStock(product, quantity);
     await this.productRepository.update(product);
 
     if (product.stock === 0) {

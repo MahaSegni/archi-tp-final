@@ -24,6 +24,7 @@ import { EmailService } from 'src/product/infrastructure/presentation/email.serv
   providers: [
     OrderRepositoryTypeOrm,
     PdfGeneratorService,
+    EmailService,
 
     {
       provide: GenerateInvoiceService,
